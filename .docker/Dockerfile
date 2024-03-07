@@ -5,8 +5,10 @@
 
 FROM lscr.io/linuxserver/openvscode-server:latest AS base
 
-COPY .docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-RUN chmod +x /usr/local/bin/docker-entrypoint
+RUN mkdir -p /custom-cont-init.d
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint"]
-# CMD ["php-fpm"]
+COPY --from=bunnyshell/cli:latest /usr/bin/bns /usr/bin/bns
+
+COPY .docker/*.sh /custom-cont-init.d/
+RUN chmod +x /custom-cont-init.d/*.sh
+
